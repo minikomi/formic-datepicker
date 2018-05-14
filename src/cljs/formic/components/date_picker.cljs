@@ -60,7 +60,7 @@
 (defn valid-date? [valid-date-range d]
   (t/within? valid-date-range d))
 
-(defn week->row [week shown-month date valid-date-range disabled? is-open on-selected]
+(defn week->row [week shown-month date valid-date-range active? is-open on-selected]
   (into [:tr {:key week}]
         (for [d week]
           (if (nil? d)
@@ -70,7 +70,7 @@
                                               d)
                   is-valid (and
                             (valid-date? valid-date-range this-day)
-                            (not (disabled? this-day)))
+                            (active? this-day))
                   is-selected (t/= date this-day)
                   is-today (today? this-day)
                   click-handler (fn [ev]
@@ -156,7 +156,7 @@
                             min-date
                             max-date
                             is-open
-                            disabled?
+                            active?
                             table-id
                             on-selected] :as props}]
   (let [shown-month (r/atom
@@ -227,7 +227,7 @@
                             shown-month
                             date
                             valid-date-range
-                            disabled?
+                            active?
                             is-open
                             on-selected)))])]]))
       :component-did-mount
@@ -262,7 +262,7 @@
                 touched
                 days
                 err
-                disabled?
+                active?
                 current-value]} f]
     (fn [{:keys [value]}]
       [:div.date-picker
@@ -288,7 +288,7 @@
                         :days (or days DAYS)
                         :min-date (or min-date MIN_DATE)
                         :max-date (or max-date MAX_DATE)
-                        :disabled? (or disabled? (constantly false))
+                        :active? (or active? (constantly true))
                         :table-id (str (name (:id f)) "-table")
                         :date @current-value
                         :on-selected #(reset! current-value %)}])
