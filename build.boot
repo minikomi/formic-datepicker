@@ -1,7 +1,8 @@
 (def project 'co.poyo/formic-datepicker)
 (def version "0.1.0-SNAPSHOT")
 
-(set-env! :resource-paths #{"src/cljs"}
+(set-env! :resource-paths #{"src"}
+          :source-paths #{"src"}
           :dependencies   '[[org.clojure/clojure "1.9.0"]
                             [org.clojure/clojurescript "1.10.238"]
                             [com.andrewmcveigh/cljs-time "0.5.2"]
