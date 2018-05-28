@@ -7,6 +7,7 @@
                             [com.andrewmcveigh/cljs-time "0.5.2"]
                             [reagent "0.8.0"]
                             [adzerk/bootlaces "0.1.13"]
+                            [co.poyo/formic "0.1.0-SNAPSHOT"]
                             [funcool/struct "1.2.0"]])
 
 (require '[adzerk.bootlaces :refer :all])
