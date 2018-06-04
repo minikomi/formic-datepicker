@@ -4,6 +4,8 @@
             [cljs-time.format :refer [formatter parse unparse]]
             [formic.util :as u]
             [reagent.core :as r]
+            [goog.events :as events]
+            [goog.events.EventType :as event-type]
             [goog.dom :as gdom]))
 
 ;; constants ------------------------
@@ -232,23 +234,23 @@
                             on-selected)))])]]))
       :component-did-mount
       (fn [this]
-        (goog.events.listen
+        (events/listen
          js/window
-         goog.events.EventType.CLICK
+         event-type/CLICK
          outside-click-handler)
-        (goog.events.listen
+        (events/listen
          js/window
-         goog.events.EventType.KEYDOWN
+         event-type/KEYDOWN
          key-down-handler))
       :component-will-unmount
       (fn [this]
-        (goog.events.unlisten
+        (events/unlisten
          js/window
-         goog.events.EventType.CLICK
+         event-type/CLICK
          outside-click-handler)
-        (goog.events.unlisten
+        (events/unlisten
          js/window
-         goog.events.EventType.KEYDOWN
+         event-type/KEYDOWN
          key-down-handler))})))
 
 (defn date-picker [f]
