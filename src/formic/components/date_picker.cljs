@@ -3,6 +3,7 @@
             [cljs-time.coerce :refer [from-long]]
             [cljs-time.format :refer [formatter parse unparse]]
             [formic.util :as u]
+            [formic.field :as field]
             [reagent.core :as r]
             [goog.events :as events]
             [goog.events.EventType :as event-type]
@@ -296,3 +297,9 @@
                         :on-selected #(reset! current-value %)}])
        (when-let [err @(:err f)]
          [:h3.error err])])))
+
+(field/register-component
+ :formic-datepicker
+ {:component date-picker
+  :parser DEFAULT_PARSER
+  :serializer DEFAULT_SERIALIZER})
