@@ -258,15 +258,16 @@
   (let [is-open (r/atom false)
         {:keys [label
                 id
+                touched
+                err
+                current-value
+                opts]} f
+        {:keys [active?
+                days
                 min-date
                 max-date
                 stringify
-                months
-                touched
-                days
-                err
-                active?
-                current-value]} f]
+                months]} opts]
     (fn [{:keys [value]}]
       [:div.date-picker
        [:label
