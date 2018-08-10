@@ -260,21 +260,21 @@
                 id
                 touched
                 err
-                current-value
-                opts]} f
+                value
+                options]} f
         {:keys [active?
                 days
                 min-date
                 max-date
                 stringify
-                months]} opts]
+                months]} options]
     (fn [{:keys [value]}]
       [:div.date-picker
        [:label
         [:span.formic-input-title (or label (u/format-kw id))]
         [:input.append
          {:read-only true
-          :value ((or stringify DEFAULT_STRINGIFY) @current-value)
+          :value ((or stringify DEFAULT_STRINGIFY) @value)
           :type "text"
           :on-click
           (fn handle-click [ev]
@@ -294,8 +294,8 @@
                         :max-date (or max-date MAX_DATE)
                         :active? (or active? (constantly true))
                         :table-id (str (name (:id f)) "-table")
-                        :date @current-value
-                        :on-selected #(reset! current-value %)}])
+                        :date @value
+                        :on-selected #(reset! value %)}])
        (when-let [err @(:err f)]
          [:h3.error err])])))
 
