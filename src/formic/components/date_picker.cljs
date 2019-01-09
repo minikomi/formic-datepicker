@@ -4,6 +4,7 @@
             [cljs-time.format :refer [formatter parse unparse]]
             [formic.util :as u]
             [formic.field :as field]
+            [formic.components.inputs :as inputs]
             [reagent.core :as r]
             [goog.events :as events]
             [goog.events.EventType :as event-type]
@@ -128,8 +129,8 @@
           (let [v (js/parseInt (.. e -target -value) 10)]
             (reset! shown-month
                     (t/local-date-time (t/year @shown-month)
-                                 v
-                                 1))))}
+                                       v
+                                       1))))}
        (for [m select-months]
          ^{:key (str "select-month-" m)}
          [:option {:value (inc m)} (get MONTHS m)])]
@@ -261,6 +262,7 @@
                 touched
                 err
                 value
+                classes
                 options]} f
         {:keys [active?
                 days
@@ -269,33 +271,33 @@
                 stringify
                 months]} options]
     (fn [{:keys [value]}]
-      [:div.date-picker
-       [:label
-        [:span.formic-input-title (or label (u/format-kw id))]
-        [:input.append
-         {:read-only true
+      [inputs/common-wrapper f
+       [:div.formic-date-picker
+        [:input
+         {:class (get classes (if @err :err-input :input))
+          :read-only true
           :value ((or stringify DEFAULT_STRINGIFY) @value)
           :type "text"
           :on-click
           (fn handle-click [ev]
             (.preventDefault ev)
             (reset! touched true)
-            (swap! is-open not))}]]
-       [:span.input-inline.append
-        {:on-click
-         (fn handle-click [ev]
-           (.preventDefault ev)
-           (swap! is-open not))}]
-       (when @is-open
-         [picker-table {:is-open is-open
-                        :months (or months MONTHS)
-                        :days (or days DAYS)
-                        :min-date (or min-date MIN_DATE)
-                        :max-date (or max-date MAX_DATE)
-                        :active? (or active? (constantly true))
-                        :table-id (str (name (:id f)) "-table")
-                        :date @value
-                        :on-selected #(reset! value %)}])
+            (swap! is-open not))}]
+        [:span
+         {:on-click
+          (fn handle-click [ev]
+            (.preventDefault ev)
+            (swap! is-open not))}]
+        (when @is-open
+          [picker-table {:is-open is-open
+                         :months (or months MONTHS)
+                         :days (or days DAYS)
+                         :min-date (or min-date MIN_DATE)
+                         :max-date (or max-date MAX_DATE)
+                         :active? (or active? (constantly true))
+                         :table-id (str (name (:id f)) "-table")
+                         :date @value
+                         :on-selected #(reset! value %)}])]
        (when-let [err @(:err f)]
          [:h3.error err])])))
 
