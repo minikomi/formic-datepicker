@@ -33,6 +33,7 @@
   (unparse DEFAULT_FORMATTER d))
 
 (defn DEFAULT_PARSER [d]
+  (println "PARSING d" d)
   (parse DEFAULT_FORMATTER d))
 
 (defn DEFAULT_STRINGIFY [d]
@@ -255,10 +256,11 @@
          event-type/KEYDOWN
          key-down-handler))})))
 
-(defn date-picker [f]
+(defn date-picker-component [f]
   (let [is-open (r/atom false)
         {:keys [label
                 id
+                err
                 touched
                 err
                 value
@@ -274,7 +276,7 @@
       [inputs/common-wrapper f
        [:div.formic-date-picker
         [:input
-         {:class (get classes (if @err :err-input :input))
+         {:class (get classes (if err :err-input :input))
           :read-only true
           :value ((or stringify DEFAULT_STRINGIFY) @value)
           :type "text"
@@ -298,11 +300,10 @@
                          :table-id (str (name (:id f)) "-table")
                          :date @value
                          :on-selected #(reset! value %)}])]
-       (when-let [err @(:err f)]
+       (when err
          [:h3.error err])])))
 
-(field/register-component
- :formic-datepicker
- {:component date-picker
-  :parser DEFAULT_PARSER
-  :serializer DEFAULT_SERIALIZER})
+(def date-picker
+  {:component date-picker-component
+   :parser DEFAULT_PARSER
+   :serializer DEFAULT_SERIALIZER})
